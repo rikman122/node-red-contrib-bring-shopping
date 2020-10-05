@@ -1,0 +1,381 @@
+<!--- CONFIG NODE --->
+<script type="text/javascript">
+
+    RED.nodes.registerType('bringCredentials',{
+        category: 'config',
+        defaults: {
+			name:   { value: "", required: true },
+		},
+		credentials: {
+			email:           { type:"text", required: true },
+            password:        { type:"text", required: true }
+		},
+        label:          function() { return this.name; },
+        paletteLabel:   "Bring! Credentials",
+        oneditprepare:  function() {
+            var nodeId = this.id;
+            var node = this;
+
+            $("#authorizeButton").click(function(){     
+                const email         = $("#node-config-input-email").val();
+                const password      = $("#node-config-input-password").val();
+                $.getJSON('/bring-shopping/auth/'+encodeURIComponent(email)+'/'+encodeURIComponent(password),function(data) {
+                    if (data.uuid) {
+                        alert("Successfully authorized!");
+                    } else if (data.error) {
+                        alert("Error \""+data.error+"\": "+data.message);
+                    } else {
+                        alert(data);
+                    }
+                });
+            });
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="bringCredentials">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-config-input-name" placeholder="Name" />
+    </div>
+    <div class="form-row">
+        <label for="node-input-email"><i class="fa fa-tag"></i> email</label>
+        <input type="text" id="node-config-input-email" placeholder="email" />
+	</div>
+    <div class="form-row">
+        <label for="node-input-password"><i class="fa fa-tag"></i> password</label>
+        <input type="password" id="node-config-input-password" placeholder="password" />
+    </div>
+    <div class="form-row">
+        <button id="authorizeButton">Authorize</button>
+</script>
+
+<script type="text/html" data-help-name="bringCredentials">
+    <h3>Parameters</h3>
+</script>
+
+<!--- LOAD LISTS --->
+<script type="text/javascript">
+    RED.nodes.registerType('loadLists',{
+        category: 'Bring shopping',
+        color: '#a6bbcf',
+        icon: "bringIcon.svg",
+        defaults: {
+            name: 			    { value: "" },
+			bringCredentials: 	{ value: "", type: "bringCredentials" },
+        },
+        inputs: 1,
+        outputs: 1,
+        label: function() { return this.name || "Load lists"; },
+        paletteLabel: "Load lists",
+        oneditprepare: function(){
+            var node = this;
+            var nodeId = node.id;
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="loadLists">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name" />
+    </div>
+	
+    <div class="form-row">
+        <label for="node-input-bringCredentials"><i class="fa fa-key"></i> Credentials</label>
+        <input type="text" id="node-input-bringCredentials" placeholder="bringCredentials" />
+    </div>
+</script>
+
+<script type="text/html" data-help-name="loadLists">
+    <h3>Parameters</h3>
+</script>
+
+<!--- GET ITEMS --->
+<script type="text/javascript">
+    RED.nodes.registerType('getItems',{
+        category: 'Bring shopping',
+        color: '#a6bbcf',
+        icon: "bringIcon.svg",
+        defaults: {
+            name: 			    { value: "" },
+            bringCredentials: 	{ value: "", type: "bringCredentials" },
+            listUUID:           { value: "" }
+        },
+        inputs: 1,
+        outputs: 1,
+        label: function() { return this.name || "Get Items"; },
+        paletteLabel: "Get Items",
+        oneditprepare: function(){
+            var node = this;
+            var nodeId = node.id;
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="getItems">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name" />
+    </div>
+	
+    <div class="form-row">
+        <label for="node-input-bringCredentials"><i class="fa fa-key"></i> Credentials</label>
+        <input type="text" id="node-input-bringCredentials" placeholder="bringCredentials" />
+    </div>
+	
+    <div class="form-row">
+        <label for="node-input-listUUID"><i class="fa fa-key"></i> List UUID</label>
+        <input type="text" id="node-input-listUUID" placeholder="listUUID" />
+    </div>
+</script>
+
+<script type="text/html" data-help-name="getItems">
+    <h3>Parameters</h3>
+</script>
+
+<!--- LOAD TRANSLATIONS --->
+<script type="text/javascript">
+    RED.nodes.registerType('loadTranslations',{
+        category: 'Bring shopping',
+        color: '#a6bbcf',
+        icon: "bringIcon.svg",
+        defaults: {
+            name: 			    { value: "" },
+            bringCredentials: 	{ value: "", type: "bringCredentials" },
+            locale:             { value: "de-DE" }
+        },
+        inputs: 1,
+        outputs: 1,
+        label: function() { return this.name || "Load translations"; },
+        paletteLabel: "Load translations",
+        oneditprepare: function(){
+            var node = this;
+            var nodeId = node.id;
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="loadTranslations">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name" />
+    </div>
+	
+    <div class="form-row">
+        <label for="node-input-bringCredentials"><i class="fa fa-key"></i> Credentials</label>
+        <input type="text" id="node-input-bringCredentials" placeholder="bringCredentials" />
+    </div>
+	
+    <div class="form-row">
+        <label for="node-input-locale"><i class="fa fa-key"></i> Locale</label>
+        <input type="text" id="node-input-locale" placeholder="locale" />
+    </div>
+</script>
+
+<script type="text/html" data-help-name="loadTranslations">
+    <h3>Parameters</h3>
+</script>
+
+<!--- LOAD CATALOG --->
+<script type="text/javascript">
+    RED.nodes.registerType('loadCatalog',{
+        category: 'Bring shopping',
+        color: '#a6bbcf',
+        icon: "bringIcon.svg",
+        defaults: {
+            name: 			    { value: "" },
+            bringCredentials: 	{ value: "", type: "bringCredentials" },
+            locale:             { value: "de-DE" }
+        },
+        inputs: 1,
+        outputs: 1,
+        label: function() { return this.name || "Load catalog"; },
+        paletteLabel: "Load catalog",
+        oneditprepare: function(){
+            var node = this;
+            var nodeId = node.id;
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="loadCatalog">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name" />
+    </div>
+	
+    <div class="form-row">
+        <label for="node-input-bringCredentials"><i class="fa fa-key"></i> Credentials</label>
+        <input type="text" id="node-input-bringCredentials" placeholder="bringCredentials" />
+    </div>
+	
+    <div class="form-row">
+        <label for="node-input-locale"><i class="fa fa-key"></i> Locale</label>
+        <input type="text" id="node-input-locale" placeholder="locale" />
+    </div>
+</script>
+
+<script type="text/html" data-help-name="loadCatalog">
+    <h3>Parameters</h3>
+</script>
+
+<!--- GET ITEMS DETAILED --->
+<script type="text/javascript">
+    RED.nodes.registerType('getItemsDetailed',{
+        category: 'Bring shopping',
+        color: '#a6bbcf',
+        icon: "bringIcon.svg",
+        defaults: {
+            name: 			    { value: "" },
+            bringCredentials: 	{ value: "", type: "bringCredentials" },
+            locale:             { value: "de-DE" },
+            listUUID:           { value: "" }
+        },
+        inputs: 1,
+        outputs: 1,
+        label: function() { return this.name || "Get items detailed"; },
+        paletteLabel: "Get items detailed",
+        oneditprepare: function(){
+            var node = this;
+            var nodeId = node.id;
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="getItemsDetailed">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name" />
+    </div>
+	
+    <div class="form-row">
+        <label for="node-input-bringCredentials"><i class="fa fa-key"></i> Credentials</label>
+        <input type="text" id="node-input-bringCredentials" placeholder="bringCredentials" />
+    </div>
+	
+    <div class="form-row">
+        <label for="node-input-locale"><i class="fa fa-key"></i> Locale</label>
+        <input type="text" id="node-input-locale" placeholder="locale" />
+    </div>
+	
+    <div class="form-row">
+        <label for="node-input-listUUID"><i class="fa fa-key"></i> List UUID</label>
+        <input type="text" id="node-input-listUUID" placeholder="listUUID" />
+    </div>
+</script>
+
+<script type="text/html" data-help-name="getItemsDetailed">
+    <h3>Parameters</h3>
+</script>
+
+<!--- REMOVE ITEM --->
+<script type="text/javascript">
+    RED.nodes.registerType('removeItem',{
+        category: 'Bring shopping',
+        color: '#a6bbcf',
+        icon: "bringIcon.svg",
+        defaults: {
+            name: 			    { value: "" },
+            bringCredentials: 	{ value: "", type: "bringCredentials" },
+        },
+        inputs: 1,
+        outputs: 1,
+        label: function() { return this.name || "Remove item"; },
+        paletteLabel: "Remove item",
+        oneditprepare: function(){
+            var node = this;
+            var nodeId = node.id;
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="removeItem">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name" />
+    </div>
+	
+    <div class="form-row">
+        <label for="node-input-bringCredentials"><i class="fa fa-key"></i> Credentials</label>
+        <input type="text" id="node-input-bringCredentials" placeholder="bringCredentials" />
+    </div>
+</script>
+
+<script type="text/html" data-help-name="removeItem">
+    <h3>Parameters</h3>
+</script>
+
+<!--- MOVE TO RECENTLY --->
+<script type="text/javascript">
+    RED.nodes.registerType('moveToRecently',{
+        category: 'Bring shopping',
+        color: '#a6bbcf',
+        icon: "bringIcon.svg",
+        defaults: {
+            name: 			    { value: "" },
+            bringCredentials: 	{ value: "", type: "bringCredentials" },
+        },
+        inputs: 1,
+        outputs: 1,
+        label: function() { return this.name || "Move to recently"; },
+        paletteLabel: "Move to recently",
+        oneditprepare: function(){
+            var node = this;
+            var nodeId = node.id;
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="moveToRecently">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name" />
+    </div>
+	
+    <div class="form-row">
+        <label for="node-input-bringCredentials"><i class="fa fa-key"></i> Credentials</label>
+        <input type="text" id="node-input-bringCredentials" placeholder="bringCredentials" />
+    </div>
+</script>
+
+<script type="text/html" data-help-name="moveToRecently">
+    <h3>Parameters</h3>
+</script>
+
+<!--- SAVE ITEM --->
+<script type="text/javascript">
+    RED.nodes.registerType('saveItem',{
+        category: 'Bring shopping',
+        color: '#a6bbcf',
+        icon: "bringIcon.svg",
+        defaults: {
+            name: 			    { value: "" },
+            bringCredentials: 	{ value: "", type: "bringCredentials" },
+        },
+        inputs: 1,
+        outputs: 1,
+        label: function() { return this.name || "Save item"; },
+        paletteLabel: "Save item",
+        oneditprepare: function(){
+            var node = this;
+            var nodeId = node.id;
+        }
+    });
+</script>
+
+<script type="text/html" data-template-name="saveItem">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name" />
+    </div>
+	
+    <div class="form-row">
+        <label for="node-input-bringCredentials"><i class="fa fa-key"></i> Credentials</label>
+        <input type="text" id="node-input-bringCredentials" placeholder="bringCredentials" />
+    </div>
+</script>
+
+<script type="text/html" data-help-name="saveItem">
+    <h3>Parameters</h3>
+</script>

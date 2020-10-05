@@ -1,0 +1,23 @@
+{
+    "name": "node-red-contrib-bring-shopping",
+    "version": "0.0.1",
+    "description": "Nodes to interact with Bring! Shopping App",
+    "author": "Max Dhom",
+    "node-red": {
+        "nodes": {
+            "bring": "src/bring.js"
+        }
+    },
+    "dependencies": {
+        "bring-shopping": "^1.2.3"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/mdhom/node-red-contrib-bring-shopping"
+    },
+    "keywords": [
+        "node-red",
+        "Bring!",
+        "shopping"
+    ]
+}
