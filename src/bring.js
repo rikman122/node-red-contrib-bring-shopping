@@ -254,7 +254,7 @@ module.exports = function(RED) {
                     } else {
                         // CHECK CATALOG
                         var found = false;
-                        msg.catalog.sections.forEach(section => {
+                        msg.catalog.catalog.sections.forEach(section => {
                             if (section.items.includes(itemDetailed.name)) {      
                                 itemDetailed.iconUrl += toUrlName(itemDetailed.name);
                                 found = true;
